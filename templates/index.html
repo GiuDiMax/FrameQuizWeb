@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<title>Indovina il Frame</title>
+<meta property="og:title" content="Indovina il Frame" />
+<meta name="description" content="Gioco indovina il frame" />
+<meta property="og:description" content="Gioco indovina il frame" />
+<meta property="og:image" content="/static/images/anteprima.webp" />
+<meta property="og:url" content="{{ request.url }}" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="it_IT" />
+{% endblock %}
+
+{% block content %}
+<div id="title"></div>
+<img id="frame" src="" alt="frame" />
+{% endblock %}
+
+{% block footer %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => load_home());
+    function load_home() {
+        frame();
+    }
+
+    function loaded() {
+        setTimeout(spinnerhide, 100);
+    }
+
+    function frame(){
+        $('.spinnercontainer').show();
+        var frame = document.querySelector('#frame')
+        //console.log(frame)
+        $.ajax({
+            url: "/frame",
+            data: 'json',
+            success: function(result)
+            {
+                console.log(result);
+                //var film = jQuery.parseJSON(result);
+                //console.log(film);
+                $('#frame').attr("src", result.frame);
+                if (frame.complete) {
+                    loaded();
+                } else {
+                    frame.addEventListener('load', loaded)
+                    frame.addEventListener('error', function() {
+                        alert('error')
+                    })
+                }
+            }
+        });
+
+
+    }
+</script>
+{% endblock %}

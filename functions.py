@@ -22,7 +22,7 @@ def randomFrame(d):
     url = 'https://api.themoviedb.org/3/movie/{1}?api_key={0}&language=it-IT'
     r['t'].append(requests.get(url.format(tmdb, film['id'])).json()['title'])
     for t in r['t']:
-        for sign in [' -', ' (', ': ', 'the']:
+        for sign in [' -', ' (', ': ']:
             if sign in t:
                 if t.split(sign, 1)[0].strip() not in r['t']:
                     r['t'].append(t.split(sign, 1)[0].strip())
@@ -32,6 +32,9 @@ def randomFrame(d):
         for sign in [{'n': ' 2', 'l': ' ii'}, {'n': ' 3', 'l': ' iii'}, {'n': ' 4', 'l': ' iv'}]:
             if sign['l'] in t:
                 r['t'].append(t.replace(sign['l'], sign['n']))
+        for sign in ['the']:
+            if sign in t:
+                r['t'].append(t.replace("the", "").strip())
     if 'release_date' in film:
         r['y'] = int(film['release_date'].split("-", 1)[0])
     r['i'] = "Decennio: " + str(int(r['y']/10)*10) + " - Genere:"

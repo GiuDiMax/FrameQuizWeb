@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/frame')
 def frame():
-    return jsonify(randomFrame())
+    return jsonify(randomFrame(request.args['d']))
 
 
 @app.route('/')

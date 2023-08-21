@@ -13,26 +13,109 @@
 
 {% block content %}
 <section class="quiz">
-    <img id="frame" class="frame" src="" alt="frame" />
-    <div class="mb-3 solcontainer">
-        <label for="soluzione" class="form-label">Digita qui la soluzione</label>
+    <img id="frame" class="frame" src="/static/images/cinema.jpg" alt="frame" />
+    <div class="mb-3 solcontainer game">
+        <label for="soluzione" class="form-label">Digita qui la soluzione (<span id="valore"></span> punti)</label>
         <input type="text" class="form-control soluzione" id="soluzione">
+    </div>
+    <div class="indizio game" id="indizio"></div>
+    <div class="board game">
+        <div>
+            <div class="title">Punti</div>
+            <div class="score" id="punti">0</div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary title" id="btn-passo">Passo</button>
+            <div class="score" id="passo">3</div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-success title" id="btn-indizio">Indizio</button>
+            <div class="score" id="indizi">3</div>
+        </div>
+    </div>
+    <div class="diff">Per iniziare una nuova partita, scegli la difficoltà</div>
+    <div class="nuovo">
+        <button type="button" class="btn btn-success ngioco" data-d="1">Facile</button>
+        <button type="button" class="btn btn-primary ngioco" data-d="2">Medio</button>
+        <button type="button" class="btn btn-warning ngioco" data-d="3">Difficile</button>
+        <button type="button" class="btn btn-danger ngioco" data-d="4">Estremo</button>
     </div>
 </section>
 {% endblock %}
 
 {% block footer %}
 <script>
+
     var sol = [];
+    var indiziotesto = "";
+    var d = "";
+    var punti = 0;
     document.addEventListener('DOMContentLoaded', () => load_home());
     function load_home() {
-        frame();
+        //console.log(similarity('Stack Overflow','Stack Ovrflw'));
+        //frame();
+        setSol();
+        passo();
+        indizio();
+        init();
+        $('.game').hide();
+        setTimeout(spinnerhide, 100);
+    }
+
+    function init(){
+        $(".ngioco").on("click", function() {
+            d = $(this).data("d");
+            $('#indizi').text(3);
+            $('#passo').text(3);
+            $('#punti').text(0);
+            frame();
+        })
+    }
+
+    function setSol(){
         $('#soluzione').on('input',function(e){
-            if ($.inArray($('#soluzione').val().toLowerCase(), sol) >= 0) {
-                alert("BRAVO!");
-                $('#soluzione').val("");
-                frame();
+            var proposta = $('#soluzione').val().toLowerCase().replace(/[^a-z0-9]/gi, '').substring(0, 15);
+            if (proposta == ""){return};
+            $.each(sol, function(index, value) {
+                if ((similarity(value, proposta) > 0.8) && (value != "")){
+                    //console.log("INDOVINATO");
+                    //console.log(value);
+                    //console.log(proposta);
+                    $('#punti').text(parseInt($('#punti').text()) + punti);
+                    $('#soluzione').val("");
+                    frame();
+                    return false;
+                }
+            });
+            //f ($.inArray($('#soluzione').val().toLowerCase().replace(/[^a-z0-9]/gi, '').substring(0, 15), sol) >= 0) {
+            //    $('#punti').text(parseInt($('#punti').text()) + punti);
+            //    $('#soluzione').val("");
+            //    frame();
+            //}
+        });
+    }
+
+    function passo(){
+        $("#btn-passo").on("click", function() {
+            if (parseInt($('#passo').text())<1){
+                return
             }
+            $('#passo').text(parseInt($('#passo').text()) - 1);
+            if (parseInt($('#passo').text())<1){
+                $('#btn-passo'). attr("disabled", true);
+            }
+            frame();
+        });
+    }
+
+    function indizio(){
+        $("#btn-indizio").on("click", function() {
+            if (parseInt($('#indizi').text())<1){
+                return
+            }
+            $('#indizi').text(parseInt($('#indizi').text()) - 1);
+            $('#btn-indizio'). attr("disabled", true);
+            $('#indizio').text(indiziotesto)
         });
     }
 
@@ -45,7 +128,7 @@
         var frame = document.querySelector('#frame');
         //console.log(frame)
         $.ajax({
-            url: "/frame",
+            url: "/frame?d=" + d,
             data: 'json',
             success: function(result)
             {
@@ -53,7 +136,25 @@
                 //var film = jQuery.parseJSON(result);
                 //console.log(film);
                 $('#frame').attr("src", result.frame);
-                sol = result.t;
+                $('#valore').text(result.p);
+                //sol = result.t;
+                sol = [];
+                $.each(result.t, function( index, value ) {
+                    console.log(value);
+                    sol.push(value.replace(/[^a-z0-9]/gi, '').substring(0, 15));
+                });
+                //console.log(sol);
+                indiziotesto = result.i;
+                $('#indizio').text("Premi indizio per riceve l'indizio.");
+                $('#soluzione').val("");
+                $('.game').show();
+                punti = result.p;
+                if (parseInt($('#indizi').text())>0){
+                    $('#btn-indizio'). attr("disabled", false);
+                }
+                if (parseInt($('#passo').text())>0){
+                    $('#btn-passo'). attr("disabled", false);
+                }
                 if (frame.complete) {
                     loaded();
                 } else {

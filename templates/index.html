@@ -132,7 +132,7 @@
             data: 'json',
             success: function(result)
             {
-                console.log(result);
+                {% if debug %}console.log(result);{% endif %}
                 //var film = jQuery.parseJSON(result);
                 //console.log(film);
                 $('#frame').attr("src", result.frame);
@@ -140,7 +140,7 @@
                 //sol = result.t;
                 sol = [];
                 $.each(result.t, function( index, value ) {
-                    console.log(value);
+                    {% if debug %}console.log(value);{% endif %}
                     sol.push(value.replace(/[^a-z0-9]/gi, '').substring(0, 15));
                 });
                 //console.log(sol);

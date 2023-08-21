@@ -11,7 +11,12 @@ def frame():
 
 @app.route('/')
 def main():
-    return render_template('index.html')
+    return render_template('index.html', debug=False)
+
+
+@app.route('/debug')
+def main2():
+    return render_template('index.html', debug=True)
 
 
 if __name__ == '__main__':

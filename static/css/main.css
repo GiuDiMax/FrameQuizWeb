@@ -25,3 +25,23 @@
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+.quiz{
+    width: 80%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.quiz .frame{
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.solcontainer{
+    margin-top: 50px;
+}

@@ -12,15 +12,28 @@
 {% endblock %}
 
 {% block content %}
-<div id="title"></div>
-<img id="frame" src="" alt="frame" />
+<section class="quiz">
+    <img id="frame" class="frame" src="" alt="frame" />
+    <div class="mb-3 solcontainer">
+        <label for="soluzione" class="form-label">Digita qui la soluzione</label>
+        <input type="text" class="form-control soluzione" id="soluzione">
+    </div>
+</section>
 {% endblock %}
 
 {% block footer %}
 <script>
+    var sol = [];
     document.addEventListener('DOMContentLoaded', () => load_home());
     function load_home() {
         frame();
+        $('#soluzione').on('input',function(e){
+            if ($.inArray($('#soluzione').val().toLowerCase(), sol) >= 0) {
+                alert("BRAVO!");
+                $('#soluzione').val("");
+                frame();
+            }
+        });
     }
 
     function loaded() {
@@ -29,7 +42,7 @@
 
     function frame(){
         $('.spinnercontainer').show();
-        var frame = document.querySelector('#frame')
+        var frame = document.querySelector('#frame');
         //console.log(frame)
         $.ajax({
             url: "/frame",
@@ -40,6 +53,7 @@
                 //var film = jQuery.parseJSON(result);
                 //console.log(film);
                 $('#frame').attr("src", result.frame);
+                sol = result.t;
                 if (frame.complete) {
                     loaded();
                 } else {

@@ -21,8 +21,12 @@
     <div class="indizio game" id="indizio"></div>
     <div class="board game">
         <div>
-            <div class="title">Punti</div>
+            <div class="title">Punti <span id="dif"></span></div>
             <div class="score" id="punti">0</div>
+        </div>
+        <div>
+            <div class="title">Indovinati</div>
+            <div class="score" id="indovinati">0</div>
         </div>
         <div>
             <button type="button" class="btn btn-primary title" id="btn-passo">Passo</button>
@@ -65,7 +69,10 @@
     function init(){
         $(".ngioco").on("click", function() {
             d = $(this).data("d");
+            //console.log($(this).text());
+            $('#dif').text(" (" + $(this).text() + ")");
             $('#indizi').text(3);
+            $('#indovinati').text(0);
             $('#passo').text(3);
             $('#punti').text(0);
             frame();
@@ -82,6 +89,7 @@
                     //console.log(value);
                     //console.log(proposta);
                     $('#punti').text(parseInt($('#punti').text()) + punti);
+                    $('#indovinati').text(parseInt($('#indovinati').text()) + 1);
                     $('#soluzione').val("");
                     frame();
                     return false;

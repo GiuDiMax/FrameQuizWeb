@@ -38,6 +38,7 @@
 
 .quiz .frame{
     width: 100%;
+    max-width: 780px;
     aspect-ratio: 16/9;
     object-fit: cover;
     border: 5px solid gray;
@@ -90,4 +91,11 @@
     margin-bottom: 25px;
     justify-content: space-around;
     align-items: center;
+}
+
+.titolofilm{
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 25px;
+    letter-spacing: .2rem;
 }

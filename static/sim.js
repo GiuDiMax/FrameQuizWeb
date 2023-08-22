@@ -38,3 +38,11 @@ function editDistance(s1, s2) {
   }
   return costs[s2.length];
 }
+
+function replaceCharacter(string, index, replacement) {
+    return (
+        string.slice(0, index) +
+        replacement +
+        string.slice(index + replacement.length)
+    );
+}

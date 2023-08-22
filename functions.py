@@ -6,7 +6,7 @@ import random
 def randomFrame(d):
     pgmax = int(d)*100
     pgmin = pgmax-99
-    baseurl = "https://image.tmdb.org/t/p/original"
+    baseurl = "https://image.tmdb.org/t/p/w780"
     #url = 'https://api.themoviedb.org/3/discover/movie?api_key={0}&language=en-US&sort_by=popularity.desc&page={1}&vote_count.gte=' + str(int(1/int(d)*1000))
     url = 'https://api.themoviedb.org/3/discover/movie?api_key={0}&language=en-US&sort_by=popularity.desc&page={1}&vote_count.gte=250'
     pag = random.randint(pgmin, pgmax)

@@ -14,12 +14,14 @@
 {% block content %}
 <section class="quiz">
     <img id="frame" class="frame" src="/static/cinema.jpg" alt="frame" />
+    <div class="titolofilm game" id="titolofilm"></div>
     <div class="mb-3 solcontainer game">
         <label for="soluzione" class="form-label">Digita qui la soluzione (<span id="valore"></span> punti)</label>
         <input type="text" class="form-control soluzione" id="soluzione">
     </div>
     <div class="indizio game" id="indizio"></div>
     <div class="dscelta game"><strong>Difficoltà: <span id="dif"></span></strong></div>
+    <div class="game">Ultimo: <span id="ultimo"></span></div>
     <div class="board game">
         <div>
             <div class="title">Punti</div>
@@ -55,6 +57,7 @@
     var indiziotesto = "";
     var d = "";
     var punti = 0;
+    var last = "?";
     document.addEventListener('DOMContentLoaded', () => load_home());
     function load_home() {
         //console.log(similarity('Stack Overflow','Stack Ovrflw'));
@@ -146,6 +149,18 @@
                 //console.log(film);
                 $('#frame').attr("src", result.frame);
                 $('#valore').text(result.p);
+                $('#ultimo').text(last);
+                last = result.t[2].toUpperCase();
+                var ll = last;
+                var down = 0;
+                for (let i = 0; i < ll.length; i++) {
+                    if(ll.charAt(i) != " " && ll.charAt(i) != "!" && ll.charAt(i) != "?" && ll.charAt(i) != "-" && ll.charAt(i) != ":" &&Math.random() - down > 0.25){
+                        ll = replaceCharacter(ll, i, '_');
+                        down = down + 0.5;
+                    }
+                    down = 0;
+                }
+                $('#titolofilm').text(ll);
                 //sol = result.t;
                 sol = [];
                 $.each(result.t, function( index, value ) {
